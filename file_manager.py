@@ -1,28 +1,34 @@
-#import the write library like os and argparse
-#argparse for mor interactivity
+
+import tkinter as tk
+
+import argparse
 from os import listdir
 from os.path import isfile
 import os, stat
-import argparse
-import shutil
 import re
+import shutil
 
 
 
-class Directory:
+
+class DirectoryCleaner:
     def __init__(self, directory=f"/Users/{os.getlogin()}/Downloads"):
         self.directory = directory
         self.files = self.get_files()
         self.created_folders = []
-        self.supported = ["pdf", "jpeg","jpg", "png", "dmg", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "zip", "mov", "mp3", "mp4", "csv", "json", "txt"]
         self.errors = []
-        self.catagories = ["Images", "Videos", "Audios", "Documents", "Textfiles", "Special",]
+        self.catagories = ["Images", "Videos", "Audios", "Documents", "Textfiles", "Executable", "Programming", "Special"]
         self.mapping = {
             "jpeg": "Images",
             "png": "Images",
             "mov": "Videos",
             "mp4": "Videos",
+            "avi": "Videos",
+            "mpg": "Videos",
+            "wmv": "Videos",
             "mp3": "Audios",
+            "wav": "Audios",
+            "mid": "Audios",
             "pptx": "Documents",
             "ppt": "Documents",
             "docx": "Documents",
@@ -32,10 +38,25 @@ class Directory:
             "csv": "Textfiles",
             "json": "Textfiles",
             "txt": "Textfiles",
-            "dmg": "Special",
+            "dmg": "Executable",
+            "exe": "Executable",
             "zip": "Special",
-            "pdf": "Documents"
-         }
+            "pdf": "Documents",
+            "py": "Programming",
+            "html": "Programming",
+            "css": "Programming",
+            "c": "Programming",
+            "java": "Programming",
+            "cs": "Programming",
+            "PHP": "Programming",
+            "swift": "Programming",
+            "vb": "Programming",
+            "asp": "Programming",
+            "xhtml": "Programming",
+            "db": "Programming",
+            "js": "Programming",
+            "md": "Programming",
+        }
         
 
     def get_files(self):
@@ -53,7 +74,7 @@ class Directory:
 
             #the extension variable include the . in the beginning so through string slicing we can get rid of the dot
             #and see if the exten is included in the self.supported attribute
-            if (exten := extension[1:]) in self.supported:
+            if (exten := extension[1:]) in self.mapping:
                 #make sure jpg and jpeg are treated as equal
                 if exten == "jpg" or exten == "jpeg":
                     exten = "jpeg"
@@ -192,14 +213,16 @@ parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory
 args = parser.parse_args()          
 
 if args.D:
-    cleanup = Directory(f"Users/{os.getlogin()}/Desktop")
+    cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Desktop")
 elif args.d:
-    cleanup = Directory(f"Users/{os.getlogin()}/Documents")
+    cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Documents")
 elif args.c:
-    cleanup = Directory(input("Type in absolute path of the directory that should be sorted: ").strip())
+    cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
 else:
-    cleanup = Directory()
+    cleanup = DirectoryCleaner()
 
-
+root = tk.Tk()
+root.geometry("400x400")
+root.mainloop()
 cleanup.move_files()
 cleanup.create_error_log()
