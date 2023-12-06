@@ -205,24 +205,23 @@ class DirectoryCleaner:
 
 
 
-#Implementation of command line arguments to change behavior of the program
-parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
-parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
-parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
-parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory e.g. -> Users/{username}/...", default=False, action="store_true")
-args = parser.parse_args()          
+if __name__ == "__main__":
+    #Implementation of command line arguments to change behavior of the program
+    parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
+    parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
+    parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
+    parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory e.g. -> Users/{username}/...", default=False, action="store_true")
+    args = parser.parse_args()          
 
-if args.D:
-    cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Desktop")
-elif args.d:
-    cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Documents")
-elif args.c:
-    cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
-else:
-    cleanup = DirectoryCleaner()
+    if args.D:
+        cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Desktop")
+    elif args.d:
+        cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Documents")
+    elif args.c:
+        cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
+    else:
+        cleanup = DirectoryCleaner()
 
-root = tk.Tk()
-root.geometry("400x400")
-root.mainloop()
-cleanup.move_files()
-cleanup.create_error_log()
+
+    cleanup.move_files()
+    cleanup.create_error_log()
