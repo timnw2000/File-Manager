@@ -7,6 +7,7 @@ from os.path import isfile
 import os, stat
 import re
 import shutil
+import sys
 
 
 
@@ -61,8 +62,12 @@ class DirectoryCleaner:
 
     def get_files(self):
         #create a generator with all files from the given directory
-        file_generator = (file for file in listdir(self.directory) if isfile(f"{self.directory}/{file}"))
-        return file_generator
+        try:
+            file_generator = (file for file in listdir(self.directory) if isfile(f"{self.directory}/{file}"))
+        except FileNotFoundError:
+            sys.exit("No files found in directory")
+        else:
+            return file_generator
 
                         
 
@@ -211,6 +216,7 @@ if __name__ == "__main__":
     parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
     parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
     parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory e.g. -> Users/{username}/...", default=False, action="store_true")
+    parser.add_argument("-G", help="Starting GUI of the Script", default=False, action="store_true")
     args = parser.parse_args()          
 
     if args.D:
@@ -219,6 +225,9 @@ if __name__ == "__main__":
         cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Documents")
     elif args.c:
         cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
+    elif args.G:
+        root = tk.Tk()
+        root.mainloop()
     else:
         cleanup = DirectoryCleaner()
 
