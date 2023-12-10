@@ -21,5 +21,10 @@ setup(
     maintainer_email="timnw.dev@gmail.com",
     project_urls={
         "Documentation": "https://github.com/timnw2000/File-Manager/blob/creating_gui/README.md",
+    },
+    entry_points={
+        "console_scripts": [
+            "cleanup = file_manager:main"
+        ]
     }
 )
