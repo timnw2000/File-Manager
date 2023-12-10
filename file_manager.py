@@ -207,11 +207,7 @@ class DirectoryCleaner:
         os.rename(f"./error_log.txt", f"{self.directory}/error_log.txt")
 
 
-
-
-
-if __name__ == "__main__":
-    #Implementation of command line arguments to change behavior of the program
+def  main():
     parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
     parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
     parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
@@ -234,3 +230,8 @@ if __name__ == "__main__":
 
     cleanup.move_files()
     cleanup.create_error_log()
+
+
+
+if __name__ == "__main__":
+    main()
