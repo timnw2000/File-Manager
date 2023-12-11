@@ -1,22 +1,55 @@
 # File Manager
 ---
-This Automation Script sorts your files according to their extensions and creates Folders and Subfolders, all files get moved to. In the end you don't have any loose file in your Directory only Folders and Subfolders that match the Category of Files.
+This Automation Script sorts your files according to their extensions and creates Folders and Subfolders, all files in the specified Directory get moved to. In the end you don't have any loose files in your Directory only Folders and Subfolders that match the Category of Files.
+
+Currently the Script only works only with MacOS.
+
 
 
 ## Installation
 ---
-Before you can use the Script with the GUI you need to `pip install` the needed dependencies.
+Before you can use the Script you need to `pip install`.
 
 You can do it like this:
 
-    pip install cleanup
-
+    pip install filecleaner
 
 
 
 ## Usage
 ---
-There are two ways you can use this script. Either through the CLI or through 
+You can use this Script by typing `cleanup` into the CLI. This will open a prompt asking you to type in an absolute path to the desired directory. This behavior represents the default. There are flags you can use to change that behavior.
+
+The first flag is `-D`
+
+    cleanup -D
+
+This flag will tell the script to clean the Desktop directory.
+
+The second flag is `-d`
+
+    cleanup -d
+
+This flag will tell the script to clean the Downloads directory
+
+The default looks comes with no flag and looks like this
+
+    cleanup
+
+This will tell the script to clean the custom directory the user provide in the prompt
+
+
+The script will creeate an error_log.txt file which stores every file the script couldn't move to a subfolder.
+Those files will be moved to the Others directory
+
+The Output on the terminal shows the files and their destination directory
+
+    /Users/some_user/Downloads/png    ---    some_image.png
+    /Users/some_user/Downloads/csv    ---    All Locations_temperature (F).csv
+    /Users/some_user/Downloads/png    ---    some_image.png
+    /Users/some_user/Downloads/png    ---    Bildschirm­foto 2023-07-10 um 12.16.02.png
+    /Users/some_user/Downloads/avi    ---    Other0001-0130.avi
+
 
 
 ## License
