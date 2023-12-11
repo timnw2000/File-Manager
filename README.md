@@ -14,6 +14,47 @@ You can do it like this:
 
     pip install filecleaner
 
+## Supported Files
+---
+Currently Supported files are:
+
+`jpeg`
+`png`
+`mov`
+`mp4`
+`avi`
+`mpg`
+`wmv`
+`mp3`
+`wav`
+`mid`
+`pptx`
+`ppt`
+`docx`
+`doc`
+`xlsx`
+`xls`
+`csv`
+`json`
+`txt`
+`dmg`
+`exe`
+`zip`
+`pdf`
+`py`
+`html`
+`css`
+`c`
+`java`
+`cs`
+`PHP`
+`swift`
+`vb`
+`asp`
+`xhtml`
+`db`
+`js`
+`md`
 
 
 ## Usage
