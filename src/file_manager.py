@@ -1,28 +1,35 @@
-#import the write library like os and argparse
-#argparse for mor interactivity
+
+import tkinter as tk
+
+import argparse
 from os import listdir
 from os.path import isfile
 import os, stat
-import argparse
-import shutil
 import re
+import shutil
+import sys
 
 
 
-class Directory:
+
+class DirectoryCleaner:
     def __init__(self, directory=f"/Users/{os.getlogin()}/Downloads"):
         self.directory = directory
         self.files = self.get_files()
         self.created_folders = []
-        self.supported = ["pdf", "jpeg","jpg", "png", "dmg", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "zip", "mov", "mp3", "mp4", "csv", "json", "txt"]
         self.errors = []
-        self.catagories = ["Images", "Videos", "Audios", "Documents", "Textfiles", "Special",]
+        self.catagories = ["Images", "Videos", "Audios", "Documents", "Textfiles", "Executable", "Programming", "Special"]
         self.mapping = {
             "jpeg": "Images",
             "png": "Images",
             "mov": "Videos",
             "mp4": "Videos",
+            "avi": "Videos",
+            "mpg": "Videos",
+            "wmv": "Videos",
             "mp3": "Audios",
+            "wav": "Audios",
+            "mid": "Audios",
             "pptx": "Documents",
             "ppt": "Documents",
             "docx": "Documents",
@@ -32,16 +39,35 @@ class Directory:
             "csv": "Textfiles",
             "json": "Textfiles",
             "txt": "Textfiles",
-            "dmg": "Special",
+            "dmg": "Executable",
+            "exe": "Executable",
             "zip": "Special",
-            "pdf": "Documents"
-         }
+            "pdf": "Documents",
+            "py": "Programming",
+            "html": "Programming",
+            "css": "Programming",
+            "c": "Programming",
+            "java": "Programming",
+            "cs": "Programming",
+            "PHP": "Programming",
+            "swift": "Programming",
+            "vb": "Programming",
+            "asp": "Programming",
+            "xhtml": "Programming",
+            "db": "Programming",
+            "js": "Programming",
+            "md": "Programming",
+        }
         
 
     def get_files(self):
         #create a generator with all files from the given directory
-        file_generator = (file for file in listdir(self.directory) if isfile(f"{self.directory}/{file}"))
-        return file_generator
+        try:
+            file_generator = (file for file in listdir(self.directory) if isfile(f"{self.directory}/{file}"))
+        except FileNotFoundError:
+            sys.exit("No files found in directory")
+        else:
+            return file_generator
 
                         
 
@@ -53,7 +79,7 @@ class Directory:
 
             #the extension variable include the . in the beginning so through string slicing we can get rid of the dot
             #and see if the exten is included in the self.supported attribute
-            if (exten := extension[1:]) in self.supported:
+            if (exten := extension[1:]) in self.mapping:
                 #make sure jpg and jpeg are treated as equal
                 if exten == "jpg" or exten == "jpeg":
                     exten = "jpeg"
@@ -65,7 +91,7 @@ class Directory:
                 folder_path = f"{self.directory}/{exten}"
                 #create folder with the extension as a name
                 self.create_folder_if_not_exist(folder_path, exten)
-                print(f"{folder_path}    ---    {exten}")
+                print(f"{folder_path}    ---    {file}")
 
                 #try to move the given file the newly created folder
                 try:
@@ -181,25 +207,25 @@ class Directory:
         os.rename(f"./error_log.txt", f"{self.directory}/error_log.txt")
 
 
+def  main():
+    parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
+    parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
+    parser.add_argument("-d", help="Sorting files into Folders in the Downloads Directory", default=False, action="store_true")
+    
+    args = parser.parse_args()          
+
+    if args.D:
+        cleanup = DirectoryCleaner(f"/Users/{os.getlogin()}/Desktop")
+    elif args.d:
+        cleanup = DirectoryCleaner(f"/Users/{os.getlogin()}/Downloads")
+    else:
+        cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
+
+
+    cleanup.move_files()
+    cleanup.create_error_log()
 
 
 
-#Implementation of command line arguments to change behavior of the program
-parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
-parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
-parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
-parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory e.g. -> Users/{username}/...", default=False, action="store_true")
-args = parser.parse_args()          
-
-if args.D:
-    cleanup = Directory(f"Users/{os.getlogin()}/Desktop")
-elif args.d:
-    cleanup = Directory(f"Users/{os.getlogin()}/Documents")
-elif args.c:
-    cleanup = Directory(input("Type in absolute path of the directory that should be sorted: ").strip())
-else:
-    cleanup = Directory()
-
-
-cleanup.move_files()
-cleanup.create_error_log()
+if __name__ == "__main__":
+    main()
