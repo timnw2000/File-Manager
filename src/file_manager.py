@@ -91,7 +91,7 @@ class DirectoryCleaner:
                 folder_path = f"{self.directory}/{exten}"
                 #create folder with the extension as a name
                 self.create_folder_if_not_exist(folder_path, exten)
-                print(f"{folder_path}    ---    {exten}")
+                print(f"{folder_path}    ---    {file}")
 
                 #try to move the given file the newly created folder
                 try:
@@ -210,22 +210,16 @@ class DirectoryCleaner:
 def  main():
     parser = argparse.ArgumentParser(description="This Automation-Script is sorting files into Folders - Default -> Downloads Directory")
     parser.add_argument("-D", help="Sorting files into Folders in the Desktop Directory", default=False, action="store_true")
-    parser.add_argument("-d", help="Sorting files into Folders in the Documents Directory", default=False, action="store_true")
-    parser.add_argument("-c", help="Sorting files into Folders in a Custom Directory e.g. -> Users/{username}/...", default=False, action="store_true")
-    parser.add_argument("-G", help="Starting GUI of the Script", default=False, action="store_true")
+    parser.add_argument("-d", help="Sorting files into Folders in the Downloads Directory", default=False, action="store_true")
+    
     args = parser.parse_args()          
 
     if args.D:
-        cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Desktop")
+        cleanup = DirectoryCleaner(f"/Users/{os.getlogin()}/Desktop")
     elif args.d:
-        cleanup = DirectoryCleaner(f"Users/{os.getlogin()}/Documents")
-    elif args.c:
-        cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
-    elif args.G:
-        root = tk.Tk()
-        root.mainloop()
+        cleanup = DirectoryCleaner(f"/Users/{os.getlogin()}/Downloads")
     else:
-        cleanup = DirectoryCleaner()
+        cleanup = DirectoryCleaner(input("Type in absolute path of the directory that should be sorted: ").strip())
 
 
     cleanup.move_files()
